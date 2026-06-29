@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { fetchReleases } from '../api/tmdb'
+import { fetchReleases } from '../api/watchmode'
 
-export function useReleases(language = 'en') {
+export function useReleases() {
   const [movies, setMovies] = useState([])
   const [tvShows, setTvShows] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,13 +20,8 @@ export function useReleases(language = 'en') {
           fetchReleases('tv')
         ])
         if (!cancelled) {
-          const filterByLang = (items) =>
-            language === 'all'
-              ? items
-              : items.filter(item => item.language === language)
-
-          setMovies(filterByLang(movieData))
-          setTvShows(filterByLang(tvData))
+          setMovies(movieData)
+          setTvShows(tvData)
           setLastUpdated(new Date().toISOString())
         }
       } catch (err) {
@@ -38,7 +33,7 @@ export function useReleases(language = 'en') {
 
     load()
     return () => { cancelled = true }
-  }, [language])
+  }, [])
 
   return { movies, tvShows, loading, error, lastUpdated }
 }

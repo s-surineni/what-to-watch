@@ -94,22 +94,30 @@
   border-radius: 4px;
 }
 
-.watch-btn {
-  display: block;
-  width: 100%;
-  margin-top: 6px;
-  padding: 5px 0;
-  border: none;
-  background: rgba(255, 255, 255, 0.08);
-  color: #c4c4d8;
-  font-size: 0.7rem;
-  font-weight: 500;
+.platform-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  background: #e50914;
+  padding: 3px 10px;
   border-radius: 6px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s ease;
+  margin-bottom: 4px;
 }
 
-.watch-btn:active {
-  background: rgba(255, 255, 255, 0.18);
+.original-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.watch-btn {
+  display: none;
 }

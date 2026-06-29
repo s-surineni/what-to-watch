@@ -1,14 +1,12 @@
 import { useState } from 'react'
 import MediaTabs from './components/MediaTabs'
-import LanguageSelector from './components/LanguageSelector'
 import ReleaseList from './components/ReleaseList'
 import { useReleases } from './hooks/useReleases'
 import './App.css'
 
 function App() {
+  const { movies, tvShows, loading, error, lastUpdated } = useReleases()
   const [activeTab, setActiveTab] = useState('movies')
-  const [language, setLanguage] = useState('all')
-  const { movies, tvShows, loading, error, lastUpdated } = useReleases(language)
 
   const currentItems = activeTab === 'movies' ? movies : tvShows
   const label = activeTab === 'movies' ? 'Trending Movies' : 'Trending TV Shows'
@@ -25,8 +23,6 @@ function App() {
       </header>
 
       <MediaTabs activeTab={activeTab} onChange={setActiveTab} />
-
-      <LanguageSelector value={language} onChange={setLanguage} />
 
       <main className="main-content">
         {error && (
@@ -46,7 +42,7 @@ function App() {
 
         {!loading && !error && currentItems.length === 0 && (
           <div className="empty-state">
-            <p>No releases found for this language.</p>
+            <p>No releases found.</p>
           </div>
         )}
 
@@ -56,7 +52,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Powered by TRAKT</p>
+        <p>Powered by Watchmode & JustWatch</p>
       </footer>
     </div>
   )

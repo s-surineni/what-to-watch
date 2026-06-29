@@ -40,10 +40,10 @@ export default defineConfig({
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/media\.trakt\.tv\/.*/i,
+            urlPattern: /^https:\/\/image\.tmdb\.org\/.*/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'trakt-images',
+              cacheName: 'tmdb-images',
               expiration: {
                 maxEntries: 200,
                 maxAgeSeconds: 60 * 60 * 24 * 30
@@ -51,13 +51,13 @@ export default defineConfig({
             }
           },
           {
-            urlPattern: /^https:\/\/api\.trakt\.tv\/.*/i,
+            urlPattern: /^https:\/\/api\.watchmode\.com\/.*/i,
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'trakt-api',
+              cacheName: 'watchmode-api',
               expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 4
               }
             }
           }
