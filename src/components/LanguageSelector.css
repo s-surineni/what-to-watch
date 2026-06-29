@@ -1,0 +1,36 @@
+.lang-selector {
+  display: flex;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #0d0d18;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lang-selector::-webkit-scrollbar {
+  display: none;
+}
+
+.lang-btn {
+  flex: 0 0 auto;
+  padding: 6px 14px;
+  border: 1px solid #2a2a4a;
+  background: transparent;
+  color: #999;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.lang-btn.active {
+  background: #5b6abf;
+  color: #fff;
+  border-color: #5b6abf;
+}
+
+.lang-btn:active {
+  transform: scale(0.95);
+}

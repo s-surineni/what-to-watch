@@ -75,6 +75,12 @@ body {
   background: #3a3a5a;
 }
 
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #666;
+}
+
 .skeleton-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);

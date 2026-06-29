@@ -37,6 +37,7 @@ function normalizeTraktItem(item, mediaType) {
     releaseDate: mediaType === 'tv' ? (wrapper.first_aired || '') : (wrapper.released || ''),
     mediaType,
     popularity: item.watchers || 0,
-    genreIds: []
+    genreIds: [],
+    language: wrapper.language || 'en'
   }
 }

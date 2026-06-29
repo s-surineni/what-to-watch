@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchTrending } from '../api/tmdb'
 
-export function useReleases() {
+export function useReleases(language = 'en') {
   const [movies, setMovies] = useState([])
   const [tvShows, setTvShows] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,8 +20,13 @@ export function useReleases() {
           fetchTrending('tv')
         ])
         if (!cancelled) {
-          setMovies(movieData)
-          setTvShows(tvData)
+          const filtered = (items) =>
+            language === 'all'
+              ? items
+              : items.filter(item => item.language === language)
+
+          setMovies(filtered(movieData))
+          setTvShows(filtered(tvData))
           setLastUpdated(new Date().toISOString())
         }
       } catch (err) {
@@ -33,7 +38,7 @@ export function useReleases() {
 
     load()
     return () => { cancelled = true }
-  }, [])
+  }, [language])
 
   return { movies, tvShows, loading, error, lastUpdated }
 }
