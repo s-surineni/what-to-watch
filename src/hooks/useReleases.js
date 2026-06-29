@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchReleases } from '../api/watchmode'
 
-export function useReleases() {
+export function useReleases(language = 'all') {
   const [movies, setMovies] = useState([])
   const [tvShows, setTvShows] = useState([])
   const [loading, setLoading] = useState(true)
@@ -20,8 +20,12 @@ export function useReleases() {
           fetchReleases('tv')
         ])
         if (!cancelled) {
-          setMovies(movieData)
-          setTvShows(tvData)
+          const filterByLang = (items) => {
+            if (language === 'all') return items
+            return items.filter(item => item.language === language)
+          }
+          setMovies(filterByLang(movieData))
+          setTvShows(filterByLang(tvData))
           setLastUpdated(new Date().toISOString())
         }
       } catch (err) {
@@ -33,7 +37,7 @@ export function useReleases() {
 
     load()
     return () => { cancelled = true }
-  }, [])
+  }, [language])
 
   return { movies, tvShows, loading, error, lastUpdated }
 }
