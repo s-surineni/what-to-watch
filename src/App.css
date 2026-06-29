@@ -16,6 +16,7 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .app {
@@ -35,12 +36,40 @@ body {
   z-index: 20;
 }
 
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .app-title {
   font-size: 1.5rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #fff;
   line-height: 1.1;
+  flex: 1;
+}
+
+.refresh-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #2a2a4a;
+  background: rgba(255, 255, 255, 0.05);
+  color: #aaa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.refresh-btn:active {
+  background: rgba(255, 255, 255, 0.15);
+  transform: rotate(180deg);
 }
 
 .last-updated {
@@ -52,33 +81,87 @@ body {
 .main-content {
   flex: 1;
   padding-bottom: 24px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.25s ease;
 }
 
 .error-state {
   text-align: center;
   padding: 48px 16px;
   color: #ff6b6b;
+  animation: fadeIn 0.3s ease;
 }
 
-.error-state button {
-  margin-top: 12px;
-  padding: 10px 20px;
+.error-icon {
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+.error-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #ff6b6b;
+  margin-bottom: 4px;
+}
+
+.error-subtitle {
+  font-size: 0.85rem;
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.retry-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 24px;
   background: #2a2a4a;
   color: #fff;
   border: none;
   border-radius: 8px;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.error-state button:active {
+.retry-btn:active {
   background: #3a3a5a;
+  transform: scale(0.96);
 }
 
 .empty-state {
   text-align: center;
   padding: 48px 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+.empty-icon {
+  margin-bottom: 12px;
+  opacity: 0.5;
   color: #666;
+}
+
+.empty-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #aaa;
+  margin-bottom: 6px;
+}
+
+.empty-subtitle {
+  font-size: 0.85rem;
+  color: #666;
+  max-width: 260px;
+  margin: 0 auto;
+  line-height: 1.4;
 }
 
 .skeleton-grid {

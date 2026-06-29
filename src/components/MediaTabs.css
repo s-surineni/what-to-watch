@@ -2,7 +2,7 @@
   display: flex;
   gap: 4px;
   padding: 12px 16px;
-  background: #12121f;
+  background: #0d0d18;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -18,7 +18,7 @@
   font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: 10px;
   transition: all 0.2s ease;
 }
 
@@ -28,5 +28,6 @@
 }
 
 .tab:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
+  background: #333355;
 }
