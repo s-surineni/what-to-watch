@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchTrending } from '../api/tmdb'
+import { fetchReleases } from '../api/tmdb'
 
 export function useReleases(language = 'en') {
   const [movies, setMovies] = useState([])
@@ -16,17 +16,17 @@ export function useReleases(language = 'en') {
       setError(null)
       try {
         const [movieData, tvData] = await Promise.all([
-          fetchTrending('movie'),
-          fetchTrending('tv')
+          fetchReleases('movie'),
+          fetchReleases('tv')
         ])
         if (!cancelled) {
-          const filtered = (items) =>
+          const filterByLang = (items) =>
             language === 'all'
               ? items
               : items.filter(item => item.language === language)
 
-          setMovies(filtered(movieData))
-          setTvShows(filtered(tvData))
+          setMovies(filterByLang(movieData))
+          setTvShows(filterByLang(tvData))
           setLastUpdated(new Date().toISOString())
         }
       } catch (err) {
