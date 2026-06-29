@@ -61,7 +61,7 @@
 }
 
 .card-info {
-  padding: 8px 10px 10px;
+  padding: 8px 10px 12px;
 }
 
 .card-title {
@@ -92,4 +92,24 @@
   background: rgba(139, 156, 247, 0.12);
   padding: 2px 8px;
   border-radius: 4px;
+}
+
+.watch-btn {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 5px 0;
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  color: #c4c4d8;
+  font-size: 0.7rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
+}
+
+.watch-btn:active {
+  background: rgba(255, 255, 255, 0.18);
 }

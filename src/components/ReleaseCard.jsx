@@ -40,7 +40,7 @@ function DummyPoster({ title }) {
 export default function ReleaseCard({ item }) {
   const { title, name, voteAverage, releaseDate, mediaType } = item
 
-  const handleClick = () => {
+  const handleCardClick = () => {
     const searchQuery = encodeURIComponent(title || name)
     const url = mediaType === 'tv'
       ? `https://www.themoviedb.org/search?query=${searchQuery}`
@@ -48,8 +48,14 @@ export default function ReleaseCard({ item }) {
     window.open(url, '_blank', 'noopener')
   }
 
+  const handleWatchClick = (e) => {
+    e.stopPropagation()
+    const searchQuery = encodeURIComponent(title || name)
+    window.open(`https://www.justwatch.com/in/search?q=${searchQuery}`, '_blank', 'noopener')
+  }
+
   return (
-    <article className="release-card" onClick={handleClick}>
+    <article className="release-card" onClick={handleCardClick}>
       <div className="poster-wrapper">
         <DummyPoster title={title} />
         <div className="rating-badge">
@@ -60,6 +66,9 @@ export default function ReleaseCard({ item }) {
         <h3 className="card-title">{title || name}</h3>
         <p className="card-date">{formatDate(releaseDate)}</p>
         <span className="media-badge">{mediaType === 'tv' ? 'TV' : 'Movie'}</span>
+        <button className="watch-btn" onClick={handleWatchClick} type="button">
+          Where to Watch
+        </button>
       </div>
     </article>
   )
