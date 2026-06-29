@@ -30,7 +30,7 @@ function normalizeTraktItem(item, mediaType) {
     title: wrapper.title,
     name: wrapper.title,
     posterPath: poster,
-    posterUrl: poster ? poster : null,
+    posterUrl: poster,
     backdropPath: fanart,
     overview: wrapper.overview,
     voteAverage: wrapper.rating ? Math.round(wrapper.rating * 10) / 10 : null,
