@@ -1,0 +1,32 @@
+.media-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  background: #12121f;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid #1f1f33;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.tab.active {
+  background: #2a2a4a;
+  color: #fff;
+}
+
+.tab:active {
+  transform: scale(0.97);
+}

@@ -1,0 +1,37 @@
+.release-list {
+  padding: 16px 0;
+}
+
+.list-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 12px 4px 16px;
+  letter-spacing: -0.01em;
+}
+
+.card-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 0 16px 8px;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.card-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.card-scroll > * {
+  scroll-snap-align: start;
+}
+
+.empty-state {
+  color: #666;
+  font-size: 0.9rem;
+  padding: 0 16px;
+  margin: 0;
+}

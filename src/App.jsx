@@ -1,0 +1,55 @@
+import { useState } from 'react'
+import MediaTabs from './components/MediaTabs'
+import ReleaseList from './components/ReleaseList'
+import { useReleases } from './hooks/useReleases'
+import './App.css'
+
+function App() {
+  const { movies, tvShows, loading, error, lastUpdated } = useReleases()
+  const [activeTab, setActiveTab] = useState('movies')
+
+  const currentItems = activeTab === 'movies' ? movies : tvShows
+  const label = activeTab === 'movies' ? 'Trending Movies' : 'Trending TV Shows'
+
+  return (
+    <div className="app">
+      <header className="app-header">
+        <h1 className="app-title">What to Watch</h1>
+        {lastUpdated && (
+          <p className="last-updated">
+            Updated {new Date(lastUpdated).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          </p>
+        )}
+      </header>
+
+      <MediaTabs activeTab={activeTab} onChange={setActiveTab} />
+
+      <main className="main-content">
+        {error && (
+          <div className="error-state">
+            <p>Failed to load releases.</p>
+            <button onClick={() => window.location.reload()}>Retry</button>
+          </div>
+        )}
+
+        {loading && !error && (
+          <div className="skeleton-grid">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="skeleton-card" />
+            ))}
+          </div>
+        )}
+
+        {!loading && !error && (
+          <ReleaseList items={currentItems} label={label} />
+        )}
+      </main>
+
+      <footer className="app-footer">
+        <p>Powered by TMDB</p>
+      </footer>
+    </div>
+  )
+}
+
+export default App
