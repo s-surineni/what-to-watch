@@ -1,6 +1,8 @@
 import { load } from 'cheerio'
 
 const DAILYOTT_URL = 'https://www.dailyott.in/'
+const TMDB_BASE = 'https://api.themoviedb.org/3'
+const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300'
 
 const LANGUAGE_MAP = {
   english: 'en',
@@ -10,6 +12,33 @@ const LANGUAGE_MAP = {
   malayalam: 'ml',
   kannada: 'kn',
   korean: 'ko'
+}
+
+async function searchTmdb(title, apiKey) {
+  if (!apiKey) return null
+  try {
+    const [movieRes, tvRes] = await Promise.all([
+      fetch(`${TMDB_BASE}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`),
+      fetch(`${TMDB_BASE}/search/tv?api_key=${apiKey}&query=${encodeURIComponent(title)}`)
+    ])
+    const [movieData, tvData] = await Promise.all([
+      movieRes.ok ? movieRes.json() : Promise.resolve({ results: [] }),
+      tvRes.ok ? tvRes.json() : Promise.resolve({ results: [] })
+    ])
+
+    const best = movieData.results[0] || tvData.results[0]
+    if (!best) return null
+
+    return {
+      tmdbId: best.id,
+      voteAverage: best.vote_average,
+      posterPath: best.poster_path ? `${TMDB_IMG_BASE}${best.poster_path}` : null,
+      overview: best.overview || null,
+      mediaType: best.media_type || (movieData.results[0] ? 'movie' : 'tv')
+    }
+  } catch {
+    return null
+  }
 }
 
 async function main() {
@@ -61,6 +90,25 @@ async function main() {
       })
     })
   })
+
+  // Optional TMDB enrichment
+  const tmdbKey = process.env.TMDB_API_KEY
+  if (tmdbKey) {
+    const uniqueTitles = [...new Set(releases.map(r => r.title))]
+    const promises = uniqueTitles.map(title => searchTmdb(title, tmdbKey))
+    const results = await Promise.all(promises)
+    const cache = new Map()
+    uniqueTitles.forEach((title, i) => {
+      if (results[i]) cache.set(title, results[i])
+    })
+    for (const release of releases) {
+      const data = cache.get(release.title)
+      if (data) {
+        release.voteAverage = data.voteAverage
+        release.posterUrl = data.posterPath
+      }
+    }
+  }
 
   console.log(JSON.stringify({ releases }, null, 2))
 }

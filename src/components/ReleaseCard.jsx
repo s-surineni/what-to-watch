@@ -38,7 +38,7 @@ function DummyPoster({ title }) {
 }
 
 export default function ReleaseCard({ item }) {
-  const { title, name, voteAverage, releaseDate, mediaType, platform, isOriginal } = item
+  const { title, name, voteAverage, releaseDate, mediaType, platform, isOriginal, posterUrl } = item
 
   const handleCardClick = () => {
     const searchQuery = encodeURIComponent(title || name)
@@ -48,7 +48,16 @@ export default function ReleaseCard({ item }) {
   return (
     <article className="release-card" onClick={handleCardClick}>
       <div className="poster-wrapper">
-        <DummyPoster title={title} />
+        {posterUrl ? (
+          <img
+            src={posterUrl}
+            alt={title || name}
+            loading="lazy"
+            className="poster-img"
+          />
+        ) : (
+          <DummyPoster title={title} />
+        )}
         <div className="rating-badge">
           {voteAverage ? voteAverage.toFixed(1) : '—'}
         </div>

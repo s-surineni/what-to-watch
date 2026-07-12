@@ -5,6 +5,7 @@ A mobile-first PWA that shows the most recent OTT releases (movies & TV shows) w
 ## Features
 
 - Latest OTT movie & TV releases with platform badges (Netflix, Prime Video, JioHotstar, SonyLIV, ZEE5, etc.)
+- TMDB ratings and posters (optional)
 - Language filter: All / English / Hindi / Telugu
 - Installable PWA with offline support (service worker + runtime caching)
 - Tap a title to find where to watch on JustWatch
@@ -12,6 +13,21 @@ A mobile-first PWA that shows the most recent OTT releases (movies & TV shows) w
 ## Data source
 
 Content is scraped daily from [DailyOTT.in](https://www.dailyott.in/) using a Vercel serverless function (`/api/ott-india`).
+
+## Ratings
+
+TMDB ratings and posters are fetched automatically when `TMDB_API_KEY` is configured.
+
+### Setup TMDB ratings
+
+1. Create a free account at https://www.themoviedb.org/
+2. Request an API key at https://www.themoviedb.org/settings/api
+3. Add `TMDB_API_KEY` as a Vercel environment variable:
+   ```bash
+   vercel env add TMDB_API_KEY production
+   ```
+
+The serverless function will enrich each title with its TMDB rating and poster. For local dev testing, you can set `VITE_TMDB_API_KEY` in `.env`.
 
 ## Local development
 

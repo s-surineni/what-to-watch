@@ -1,6 +1,8 @@
 import { load } from 'cheerio'
 
 const DAILYOTT_URL = 'https://www.dailyott.in/'
+const TMDB_BASE = 'https://api.themoviedb.org/3'
+const TMDB_IMG_BASE = 'https://image.tmdb.org/t/p/w300'
 
 const LANGUAGE_MAP = {
   english: 'en',
@@ -10,6 +12,35 @@ const LANGUAGE_MAP = {
   malayalam: 'ml',
   kannada: 'kn',
   korean: 'ko'
+}
+
+async function searchTmdb(title, apiKey) {
+  if (!apiKey) return null
+  try {
+    const [movieRes, tvRes] = await Promise.all([
+      fetch(`${TMDB_BASE}/search/movie?api_key=${apiKey}&query=${encodeURIComponent(title)}`),
+      fetch(`${TMDB_BASE}/search/tv?api_key=${apiKey}&query=${encodeURIComponent(title)}`)
+    ])
+    if (!movieRes.ok && !tvRes.ok) return null
+
+    const [movieData, tvData] = await Promise.all([
+      movieRes.ok ? movieRes.json() : Promise.resolve({ results: [] }),
+      tvRes.ok ? tvRes.json() : Promise.resolve({ results: [] })
+    ])
+
+    const best = movieData.results[0] || tvData.results[0]
+    if (!best) return null
+
+    return {
+      tmdbId: best.id,
+      voteAverage: best.vote_average,
+      posterPath: best.poster_path ? `${TMDB_IMG_BASE}${best.poster_path}` : null,
+      overview: best.overview || null,
+      mediaType: best.media_type || (movieData.results[0] ? 'movie' : 'tv')
+    }
+  } catch {
+    return null
+  }
 }
 
 export default async function handler(req, res) {
@@ -27,6 +58,7 @@ export default async function handler(req, res) {
 
   const { type } = req.query
   const mediaType = type === 'tv' ? 'tv' : 'movie'
+  const tmdbApiKey = process.env.TMDB_API_KEY
 
   try {
     const response = await fetch(DAILYOTT_URL, {
@@ -78,10 +110,38 @@ export default async function handler(req, res) {
           voteAverage: null,
           popularity: 0,
           genreIds: [],
-          isOriginal: null
+          isOriginal: null,
+          tmdbData: null
         })
       })
     })
+
+    const uniqueTitles = [...new Set(releases.map(r => r.title))]
+    const tmdbCache = new Map()
+
+    if (tmdbApiKey) {
+      const tmdbPromises = uniqueTitles.slice(0, 50).map(async (title) => {
+        const data = await searchTmdb(title, tmdbApiKey)
+        tmdbCache.set(title.toLowerCase(), data)
+        return data
+      })
+      await Promise.all(tmdbPromises)
+
+      for (const release of releases) {
+        const data = tmdbCache.get(release.title.toLowerCase())
+        if (data) {
+          release.voteAverage = data.voteAverage
+          release.posterUrl = data.posterPath
+          release.backdropPath = null
+          release.tmdbData = {
+            id: data.tmdbId,
+            vote_average: data.voteAverage,
+            media_type: data.mediaType,
+            overview: data.overview
+          }
+        }
+      }
+    }
 
     return res.status(200).json({ releases })
   } catch (error) {
