@@ -8,7 +8,7 @@ import './App.css'
 function App() {
   const [activeTab, setActiveTab] = useState('movies')
   const [language, setLanguage] = useState('all')
-  const { movies, tvShows, loading, error, lastUpdated, refetch } = useReleases(language)
+  const { movies, tvShows, loading, error, lastUpdated, refetch } = useReleases(language, 'ott-india')
 
   const currentItems = activeTab === 'movies' ? movies : tvShows
   const label = activeTab === 'movies' ? 'Trending Movies' : 'Trending TV Shows'
@@ -99,7 +99,7 @@ function App() {
       </main>
 
       <footer className="app-footer">
-        <p>Powered by Watchmode & JustWatch</p>
+        <p>Powered by DailyOTT.in</p>
       </footer>
     </div>
   )

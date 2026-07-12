@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { fetchReleases } from '../api/watchmode'
+import { fetchReleases as fetchWatchmodeReleases } from '../api/watchmode'
+import { fetchReleases as fetchIndiaReleases } from '../api/ottIndia'
 
-export function useReleases(language = 'all') {
+export function useReleases(language = 'all', source = 'ott-india') {
   const [movies, setMovies] = useState([])
   const [tvShows, setTvShows] = useState([])
   const [loading, setLoading] = useState(true)
@@ -15,9 +16,10 @@ export function useReleases(language = 'all') {
       setLoading(true)
       setError(null)
       try {
+        const fetcher = source === 'watchmode' ? fetchWatchmodeReleases : fetchIndiaReleases
         const [movieData, tvData] = await Promise.all([
-          fetchReleases('movie'),
-          fetchReleases('tv')
+          fetcher('movie'),
+          fetcher('tv')
         ])
         if (!cancelled) {
           const filterByLang = (items) => {
@@ -37,7 +39,7 @@ export function useReleases(language = 'all') {
 
     load()
     return () => { cancelled = true }
-  }, [language])
+  }, [language, source])
 
   return { movies, tvShows, loading, error, lastUpdated }
 }

@@ -60,6 +60,17 @@ export default defineConfig({
                 maxAgeSeconds: 60 * 60 * 4
               }
             }
+          },
+          {
+            urlPattern: /^\/api\/ott-india/i,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'ott-india-api',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 60 * 60 * 2
+              }
+            }
           }
         ]
       }
