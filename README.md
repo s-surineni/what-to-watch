@@ -1,16 +1,59 @@
-# React + Vite
+# What to Watch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A mobile-first PWA that shows the most recent OTT releases (movies & TV shows) with the streaming platform they're available on. Built with React + Vite, powered by the [Watchmode API](https://api.watchmode.com/) and [JustWatch](https://www.justwatch.com/).
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Latest OTT movie & TV releases with platform badges (Netflix, Prime, Hulu, etc.)
+- Language filter: All / English / Hindi / Telugu
+- Installable PWA with offline support (service worker + runtime caching)
+- Tap a title to find where to watch on JustWatch
 
-## React Compiler
+## Local development
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+cp .env.example .env   # then add your Watchmode API key
+npm run dev
+```
 
-## Expanding the ESLint configuration
+### Environment variables
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+| Variable                  | Description                                              |
+| ------------------------- | ------------------------------------------------------- |
+| `VITE_WATCHMODE_API_KEY`  | API key from https://api.watchmode.com/requestApiKey    |
+
+## Build
+
+```bash
+npm run build     # outputs to dist/
+npm run preview   # preview the production build locally
+```
+
+## Deployment (Vercel)
+
+This project deploys to **Vercel**. Configuration lives in `vercel.json`.
+
+### First-time setup
+
+1. Go to https://vercel.com and log in with your GitHub account.
+2. Click **Add New… → Project** and import the `s-surineni/what-to-watch` repo.
+3. Vercel auto-detects the framework as **Vite**. Confirm:
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Under **Environment Variables**, add:
+   - `VITE_WATCHMODE_API_KEY` = your Watchmode API key
+5. Click **Deploy**.
+
+After the first deploy, every push to `main` auto-deploys. Your site will be live at
+`https://<project-name>.vercel.app`.
+
+### Deploy via CLI (optional)
+
+```bash
+npm i -g vercel
+vercel            # first run links the project
+vercel --prod     # production deploy
+```
+
+Remember to add `VITE_WATCHMODE_API_KEY` in the Vercel project settings (or via `vercel env add`).
