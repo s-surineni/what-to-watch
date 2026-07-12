@@ -1,27 +1,32 @@
 # What to Watch
 
-A mobile-first PWA that shows the most recent OTT releases (movies & TV shows) with the streaming platform they're available on. Built with React + Vite, powered by the [Watchmode API](https://api.watchmode.com/) and [JustWatch](https://www.justwatch.com/).
+A mobile-first PWA that shows the most recent OTT releases (movies & TV shows) with the streaming platform they're available on. Built with React + Vite, powered by [DailyOTT.in](https://www.dailyott.in/).
 
 ## Features
 
-- Latest OTT movie & TV releases with platform badges (Netflix, Prime, Hulu, etc.)
+- Latest OTT movie & TV releases with platform badges (Netflix, Prime Video, JioHotstar, SonyLIV, ZEE5, etc.)
 - Language filter: All / English / Hindi / Telugu
 - Installable PWA with offline support (service worker + runtime caching)
 - Tap a title to find where to watch on JustWatch
+
+## Data source
+
+Content is scraped daily from [DailyOTT.in](https://www.dailyott.in/) using a Vercel serverless function (`/api/ott-india`).
 
 ## Local development
 
 ```bash
 npm install
-cp .env.example .env   # then add your Watchmode API key
 npm run dev
 ```
 
-### Environment variables
+## Test scraper locally (without Vercel)
 
-| Variable                  | Description                                              |
-| ------------------------- | ------------------------------------------------------- |
-| `VITE_WATCHMODE_API_KEY`  | API key from https://api.watchmode.com/requestApiKey    |
+```bash
+node test-scraper.mjs movie   # movies only
+node test-scraper.mjs tv      # TV shows only
+node test-scraper.mjs         # all
+```
 
 ## Build
 
@@ -41,9 +46,7 @@ This project deploys to **Vercel**. Configuration lives in `vercel.json`.
 3. Vercel auto-detects the framework as **Vite**. Confirm:
    - **Build Command**: `npm run build`
    - **Output Directory**: `dist`
-4. Under **Environment Variables**, add:
-   - `VITE_WATCHMODE_API_KEY` = your Watchmode API key
-5. Click **Deploy**.
+4. Click **Deploy**.
 
 After the first deploy, every push to `main` auto-deploys. Your site will be live at
 `https://<project-name>.vercel.app`.
@@ -55,5 +58,3 @@ npm i -g vercel
 vercel            # first run links the project
 vercel --prod     # production deploy
 ```
-
-Remember to add `VITE_WATCHMODE_API_KEY` in the Vercel project settings (or via `vercel env add`).

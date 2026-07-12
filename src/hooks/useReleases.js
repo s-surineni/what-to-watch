@@ -1,45 +1,39 @@
-import { useState, useEffect } from 'react'
-import { fetchReleases as fetchWatchmodeReleases } from '../api/watchmode'
-import { fetchReleases as fetchIndiaReleases } from '../api/ottIndia'
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react'
+import { fetchReleases } from '../api/ottIndia'
 
-export function useReleases(language = 'all', source = 'ott-india') {
+export function useReleases(language = 'all') {
   const [movies, setMovies] = useState([])
   const [tvShows, setTvShows] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [lastUpdated, setLastUpdated] = useState(null)
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function load() {
-      setLoading(true)
-      setError(null)
-      try {
-        const fetcher = source === 'watchmode' ? fetchWatchmodeReleases : fetchIndiaReleases
-        const [movieData, tvData] = await Promise.all([
-          fetcher('movie'),
-          fetcher('tv')
-        ])
-        if (!cancelled) {
-          const filterByLang = (items) => {
-            if (language === 'all') return items
-            return items.filter(item => item.language === language)
-          }
-          setMovies(filterByLang(movieData))
-          setTvShows(filterByLang(tvData))
-          setLastUpdated(new Date().toISOString())
-        }
-      } catch (err) {
-        if (!cancelled) setError(err.message)
-      } finally {
-        if (!cancelled) setLoading(false)
+  const load = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const [movieData, tvData] = await Promise.all([
+        fetchReleases('movie'),
+        fetchReleases('tv')
+      ])
+      const filterByLang = (items) => {
+        if (language === 'all') return items
+        return items.filter(item => item.language === language)
       }
+      setMovies(filterByLang(movieData))
+      setTvShows(filterByLang(tvData))
+      setLastUpdated(new Date().toISOString())
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setLoading(false)
     }
+  }, [language])
 
+  useEffect(() => {
     load()
-    return () => { cancelled = true }
-  }, [language, source])
+  }, [load])
 
-  return { movies, tvShows, loading, error, lastUpdated }
+  return { movies, tvShows, loading, error, lastUpdated, refetch: load }
 }

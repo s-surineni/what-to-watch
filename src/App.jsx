@@ -8,7 +8,7 @@ import './App.css'
 function App() {
   const [activeTab, setActiveTab] = useState('movies')
   const [language, setLanguage] = useState('all')
-  const { movies, tvShows, loading, error, lastUpdated, refetch } = useReleases(language, 'ott-india')
+  const { movies, tvShows, loading, error, lastUpdated, refetch } = useReleases(language)
 
   const currentItems = activeTab === 'movies' ? movies : tvShows
   const label = activeTab === 'movies' ? 'Trending Movies' : 'Trending TV Shows'
